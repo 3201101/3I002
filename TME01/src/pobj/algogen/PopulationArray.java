@@ -10,7 +10,7 @@ public class PopulationArray
 
 	public PopulationArray()
 	{
-		individus = new Individu [POP_SIZE];
+		individus = new Individu[POP_SIZE];
 	}
 
 	public int size()

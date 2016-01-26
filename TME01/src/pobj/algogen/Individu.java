@@ -1,26 +1,38 @@
 package pobj.algogen;
 
-import java.util;
+import java.util.Random;
 
+/**
+ * Classe représentant un individu évolutif
+ */
 public class Individu
 {
 	public final double m;
-	private int fitness;
+	private double fitness = 0;
 
-	Individu()
+	/**
+	 * Instancie un individu évolutif caractérisé par une valeur aléatoire.
+	 */
+	public Individu()
 	{
 		Random r = new Random();
 		m = r.nextDouble();
-
-		fitness = 0;
 	}
 
-	public int getFitness()
+	/**
+	 * Retourne la valeur de la qualité
+	 * @return Valeur de fitness
+	 */
+	public double getFitness()
 	{
 		return fitness;
 	}
 
-	public void setFitness(int f)
+	/**
+	 * Définit la valeur de la qualité
+	 * @param f nouvelle valeur de fitness
+	 */
+	public void setFitness(double f)
 	{
 		fitness = f;
 	}
