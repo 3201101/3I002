@@ -1,0 +1,4 @@
+# Exclusions du versionnement
+
+# Compilations
+/*/bin/*
