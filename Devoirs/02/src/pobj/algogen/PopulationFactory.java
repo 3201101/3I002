@@ -1,8 +1,5 @@
 package pobj.algogen;
 
-import java.util.Arrays;
-import java.lang.IllegalArgumentException;
-
 /**
  * Classe technique pour la création de populations d'individus évolutifs
  */

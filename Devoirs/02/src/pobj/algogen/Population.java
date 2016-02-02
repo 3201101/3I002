@@ -1,6 +1,8 @@
 package pobj.algogen;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 /**
  * Classe représentant une population d'individus évolutifs
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 public class Population
 {
 	private ArrayList<Individu> individus = new ArrayList<>();
+	static Random r = new Random();
 
 	/**
 	 * Retourne la taille de la population
@@ -25,16 +28,6 @@ public class Population
 	public void add(Individu individu)
 	{
 		individus.add(individu);
-	}
-
-	/**
-	 * Signature texte
-	 * @return Signature texte
-	 */
-	@Override
-	public String toString()
-	{
-		return individus.toString();
 	}
 
 	/**
@@ -66,37 +59,65 @@ public class Population
 		{
 			i.setFitness(cible.eval(i));
 		}
-		individus.sort();
+		Collections.sort(individus);
 	}
 
+	/**
+	 * Provoque la mutation de l'ensemble des Individus de la Population.
+	 * @param prob Probabilité pour chaque Individu de muter.
+	 */
 	private void muter(double prob)
 	{
-		for(int i = 1; i < individus.length(); i++)
+		for(int i = 1; i < individus.size(); i++)
 		{
-			if(Math.random() < prob)
+			if(r.nextDouble() < prob)
 			{
-				individus[i].muter();
+				individus.get(i).muter();
 			}
 		}
 	}
 
+	/**
+	 * Crée une nouvelle Population évoluée.
+	 * @return Nouvelle Population
+	 */
 	private Population reproduire()
 	{
-		Population p = new Population;
-		Random r = new Random();
-		int l = individus.length();
+		Population p = new Population();
+		int l = individus.size();
 		int i = 0;
-		int c = l/5;
+		int c = Math.max(l/5, 2);
 
 		for(i = 0; i < c; i++)
 		{
-			p.add(individus[i].clone());
+			p.add(individus.get(i).clone());
 		}
 
 		for(i = c; i < l; i++)
 		{
-			p.add(individus[r.nextInt(c)].reproduire(individus[r.nextInt(c)]));
+			int pere = r.nextInt(c);
+			int mere = r.nextInt(c);
+			while(pere == mere)
+				mere = r.nextInt(c);
+			
+			p.add(individus.get(pere).croiser(individus.get(mere)));
 		}
 
+		return p;
+	}
+	
+	/**
+	 * Affiche un résumé textuel de la Population
+	 */
+	@Override
+	public String toString()
+	{
+		String s = "";
+		for(Individu i : individus)
+		{
+			s+= " > " + i.toString();
+		}
+		
+		return s;
 	}
 }

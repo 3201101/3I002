@@ -1,6 +1,5 @@
 package pobj.algogen;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -9,6 +8,7 @@ import java.util.Random;
 public class ValeurCible implements Environnement
 {
 	private double valeur;
+	static Random r = new Random();
 
 	/**
 	 * Instancie un environnement basique possédant une valeur cible donnée.
@@ -24,7 +24,7 @@ public class ValeurCible implements Environnement
 	 */
 	public ValeurCible()
 	{
-		this(Math.random());
+		this(r.nextDouble());
 	}
 
 	/**

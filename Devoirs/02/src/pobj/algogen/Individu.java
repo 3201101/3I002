@@ -9,6 +9,7 @@ public class Individu implements Comparable<Individu>
 {
 	private double valeur;
 	private double fitness = 0;
+	static Random r = new Random();
 
 	/**
 	 * Instancie un Individu évolutif caractérisé par une valeur donnée
@@ -24,7 +25,7 @@ public class Individu implements Comparable<Individu>
 	 */
 	public Individu()
 	{
-		this(Math.random());
+		this(r.nextDouble());
 	}
 
 	/**
@@ -59,7 +60,16 @@ public class Individu implements Comparable<Individu>
 	 */
 	public void muter()
 	{
-		valeur = min(max((valeur + ((Math.random() - 0.5) / 5)), 0), 1);
+		double m = ((r.nextDouble() - 0.5) / 5.0);
+		
+		if ((valeur + m > 1.0) || (valeur + m < 0.0))
+		{
+			valeur-= m;
+		}
+		else
+		{
+			valeur+= m;
+		}
 	}
 
 	/**
@@ -69,7 +79,17 @@ public class Individu implements Comparable<Individu>
 	 */
 	public Individu croiser(Individu autre)
 	{
-		return new Individu((min(max((this.getValeur() + autre.getValeur()) / 2) + ((Math.random() - 0.5) / 10)), 0), 1);
+		double l = (this.getValeur() + autre.getValeur()) / 2;
+		double m = (r.nextDouble() - 0.5) / 10;
+		
+		if ((l + m > 1.0) || (l + m < 0.0))
+		{
+			return new Individu(l - m);
+		}
+		else
+		{
+			return new Individu(l + m);
+		}
 	}
 
 	/**
@@ -79,7 +99,7 @@ public class Individu implements Comparable<Individu>
 	public Individu clone()
 	{
 		Individu i = new Individu(valeur);
-		i.setFitness = fitness;
+		i.setFitness(fitness);
 
 		return i;
 	}
@@ -92,9 +112,21 @@ public class Individu implements Comparable<Individu>
 	public int compareTo(Individu o)
 	{
 		if(o.getFitness() < fitness)
+		{
 			return -1;
+		}
 		else if (o.getFitness() > fitness)
+		{
 			return 0;
+		}
 		return 1;
+	}
+	
+	/**
+	 * Affiche un résumé textuel de l'Individu.
+	 */
+	public String toString()
+	{
+		return "Individu | Valeur propre = " + valeur + " | Fitness = " + fitness + "\n";
 	}
 }
