@@ -15,8 +15,15 @@ public class PopulationMain
 	{
 		if(args.length == 1)
 		{
+			/* Création d'une population aléatoire d'Individus */
 			Population p = PopulationFactory.createRandomPopulation(Integer.parseInt(args[0]));
+			System.out.println(p);
 
+			/* Création d'un environnement basique aléatoire */
+			Environnement e = new ValeurCible();
+
+			/* Évaluation de la population */
+			p.evaluer(e);
 			System.out.println(p);
 		}
 		else
