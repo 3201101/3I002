@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class Individu
 {
-	public final double m;
+	private final double valeur;
 	private double fitness = 0;
 
 	/**
@@ -16,7 +16,16 @@ public class Individu
 	public Individu()
 	{
 		Random r = new Random();
-		m = r.nextDouble();
+		valeur = r.nextDouble();
+	}
+
+	/**
+	 * Retourne la valeur propre de l'individu
+	 * @return Valeur propre de l'individu
+	 */
+	public double getValeur()
+	{
+		return valeur;
 	}
 
 	/**
