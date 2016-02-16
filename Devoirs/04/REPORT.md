@@ -1,30 +1,71 @@
 
 # 3I002 - TP 02
 
-_Sources fournies dans le fichier **pobj.algogen-LOGLISCI-NASTURAS-02.jar** ci-joint, ou dans **[le dépôt](http://github.com/3201101/3I002/tree/master/Devoirs/02)**._
+_Sources fournies dans le fichier **pobj.algogen-LOGLISCI-NASTURAS-04.jar** ci-joint, ou dans **[le dépôt](http://github.com/3201101/3I002/tree/master/Devoirs/04)**._
 
 
 ## Questions
 
-**Copiez-collez dans votre mail le code de votre méthode de croisement entre deux individus. Donnez une trace d’évolution de la fitness au sein de la population sur 10 générations. Ajoutez une trace d’exécution.**
+**Donnez la réponse aux questions ci-dessus. Par ailleurs, copiez-collez le code de votre clase principale et une trace d'exécution de votre programme pour le cas où vous évaluez une population de dix individus constitués d'expressions à deux variables.'**
+
+_Ceci est une réponse partielle, nous vous enverrons une réponse complète quand nous aurons terminé l'énoncé.'_
+
+Classe principale :
+
+	package pobj.algogen;
+
+	import java.util.Random;
+
+	import pobj.algogen.doubles.IndividuDouble;
+	import pobj.algogen.doubles.ValeurCible;
 
 	/**
-	 * Croise deux Individus et crée un nouvel Individu dont la valeur propre est la moyenne des deux parents assortie d'une mutation de 10% maximum.
-	 * @param  autre Second parent
-	 * @return       Individu enfant créé
+	 * Classe d'éxecution du simulateur d'évolution
 	 */
-	public Individu croiser(Individu autre)
+	public class PopulationMain
 	{
-		double l = (this.getValeur() + autre.getValeur()) / 2;
-		double m = (r.nextDouble() - 0.5) / 10;
-		
-		if ((l + m > 1.0) || (l + m < 0.0))
+		/**
+		 * Éxecuté au lancement du programme, lance une simulation de population d'individus évolutifs
+		 * @param args Arguments de lancement
+		 */
+		public static void main(String[] args)
 		{
-			return new Individu(l - m);
-		}
-		else
-		{
-			return new Individu(l + m);
+			if(args.length == 1 || args.length == 2)
+			{
+				/* Option debug */
+				if(args.length == 2)
+				{
+					Random rand = new Random(Integer.parseInt(args[1]));
+					Population.r.setSeed(rand.nextLong());
+					IndividuDouble.r.setSeed(rand.nextLong());
+					ValeurCible.r.setSeed(rand.nextLong());
+				}
+			
+				/* Création d'une population aléatoire d'Individus */
+				Population p = PopulationFactory.createRandomPopulation(Integer.parseInt(args[0]));
+				System.out.println("\nPopulation initiale\n");
+				System.out.println(p);
+
+				/* Création d'un environnement basique aléatoire */
+				Environnement e = new ValeurCible();
+
+				/* Évaluation de la population */
+				p.evaluer(e);
+				System.out.println("\nPopulation évaluée\n");
+				System.out.println(p);
+			
+				/* Évolution de la population */
+				for(int i = 0; i < 10; i++)
+				{
+					p = p.evoluer(e);
+					System.out.println("\nPopulation de génération " + i + "\n");
+					System.out.println(p);
+				}
+			}
+			else
+			{
+				throw new IllegalArgumentException("Nombre d'arguments invalide.");
+			}
 		}
 	}
 

@@ -1,7 +1,5 @@
 package pobj.algogen;
 
-import pobj.algogen.doubles.*;
-
 import java.util.Random;
 
 import pobj.algogen.doubles.IndividuDouble;
