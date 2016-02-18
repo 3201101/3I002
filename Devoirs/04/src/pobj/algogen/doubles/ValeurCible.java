@@ -55,4 +55,9 @@ public class ValeurCible implements Environnement
 			throw new IllegalArgumentException("Not a IndividuDouble");
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "Environement d'évaluation de double pour " + valeur;
+	}
 }

@@ -5,7 +5,8 @@ import java.util.Random;
 
 public class ExpressionFactory
 {
-	static Random r = new Random();
+	public static final Random r = new Random();
+	public static int MAXVARIABLES = 2;
 	
 	/**
 	 * Un constructeur pour des expressions binaires usuelles : +, -, *, /
@@ -71,7 +72,7 @@ public class ExpressionFactory
 					return createConstante(r.nextDouble());
 					
 				case 2:
-					return createVariable(r.nextInt(EnvEval.MAXVARIABLES));
+					return createVariable(r.nextInt(MAXVARIABLES));
 	
 				default:
 					throw new NoSuchElementException();
@@ -85,8 +86,18 @@ public class ExpressionFactory
 			}
 			else
 			{
-				return createVariable(r.nextInt(EnvEval.MAXVARIABLES));
+				return createVariable(r.nextInt(MAXVARIABLES));
 			}
 		}
+	}
+	
+	public static EnvEval createRandomEnvEval(int nbVal)
+	{
+		EnvEval e = new EnvEval();
+		for(int i = 0; i < nbVal; i++)
+		{
+			e.addVariable(r.nextDouble());
+		}
+		return e;
 	}
 }

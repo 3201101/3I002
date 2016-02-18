@@ -1,48 +1,37 @@
 package pobj.arith;
 
-import java.util.Random;
+import java.util.ArrayList;
 
 public class EnvEval
 {
-	static int MAXVARIABLES = 10;
-	static Random r = new Random();
-	private double tabVal[];
+	private ArrayList<Double> variables = new ArrayList<>();
 	
-	public EnvEval(int nbVal)
-	{
-		if(nbVal > MAXVARIABLES)
-			throw new IllegalArgumentException("Argument superior to MAXVARIABLE");
-		tabVal = new double[nbVal];
+	public void addVariable(double val) {
+		variables.add(val);
 	}
 	
-	public static EnvEval randEnv(int nbVal)
-	{
-		EnvEval e = new EnvEval(nbVal);
-		for(int i = 0; i < MAXVARIABLES; i++)
-		{
-			e.tabVal[i] = r.nextDouble();
-		}
-		return e;
-	}
-	
-
 	public void setVariable(int indexVariable, double val)
 	{
-		tabVal[indexVariable] = val;
+		variables.set(indexVariable, val);
 	}
 	
 	double getValue(int indexVariable)
 	{
-		return tabVal[indexVariable];
+		return variables.get(indexVariable);
+	}
+	
+	public int getSize()
+	{
+		return variables.size();
 	}
 	
 	@Override
 	public String toString()
 	{
 		String str = "Voici le tableau de valeur :\n";
-		for(int i = 0; i < tabVal.length; i++)
+		for(int i = 0; i < this.getSize(); i++)
 		{
-			str += i + " -> " + tabVal[i];
+			str += "X" + i + " -> " + variables.get(i) + "\n";
 		}
 		return str;
 	}

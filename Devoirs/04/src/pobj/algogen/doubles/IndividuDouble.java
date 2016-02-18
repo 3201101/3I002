@@ -8,7 +8,7 @@ import pobj.algogen.IIndividu;
 /**
  * Classe représentant un individu évolutif
  */
-public class IndividuDouble extends AbstractIndividu implements IIndividu
+public class IndividuDouble extends AbstractIndividu
 {
 	double valeur;
 	public static final Random r = new Random();
@@ -63,29 +63,25 @@ public class IndividuDouble extends AbstractIndividu implements IIndividu
 	@Override
 	public IndividuDouble croiser(IIndividu autre)
 	{
-		double autreVal = 0.0;
-		
 		if (autre.getValeur() instanceof Double)
 		{
-			autreVal = (Double) autre.getValeur();
+			double autreVal = (Double) autre.getValeur();
+			double l = (valeur + autreVal) / 2;
+			double m = (r.nextDouble() - 0.5) / 10;
+			
+			if ((l + m > 1.0) || (l + m < 0.0))
+			{
+				return new IndividuDouble(l - m);
+			}
+			else
+			{
+				return new IndividuDouble(l + m);
+			}
 		}
-		else
-		{
-			throw new IllegalArgumentException("Individu de types différents");
-		}
-		
-		double l = (valeur + autreVal) / 2;
-		double m = (r.nextDouble() - 0.5) / 10;
-		
-		if ((l + m > 1.0) || (l + m < 0.0))
-		{
-			return new IndividuDouble(l - m);
-		}
-		else
-		{
-			return new IndividuDouble(l + m);
-		}
+		throw new IllegalArgumentException("Individu de types différents");
 	}
+		
+
 	
 	@Override
 	public IndividuDouble clone()

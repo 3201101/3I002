@@ -10,7 +10,7 @@ import java.util.Random;
 public class Population
 {
 	private ArrayList<IIndividu> individus = new ArrayList<>();
-	static Random r = new Random();
+	public static final Random r = new Random();
 
 	/**
 	 * Retourne la taille de la population
@@ -43,6 +43,7 @@ public class Population
 	{
 		evaluer(cible);
 		Population p = reproduire();
+		p.muter(1.0);
 		p.evaluer(cible);
 
 		return p;

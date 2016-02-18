@@ -1,8 +1,6 @@
 package pobj.algogen;
 
-import pobj.algogen.doubles.IndividuDouble;
-
-public abstract class AbstractIndividu
+public abstract class AbstractIndividu implements IIndividu
 {
 
 	protected double fitness = 0;
@@ -19,7 +17,7 @@ public abstract class AbstractIndividu
 		fitness = f;
 	}
 
-	public abstract IndividuDouble clone();
+	public abstract IIndividu clone();
 
 	public int compareTo(IIndividu o) {
 		if(o.getFitness() < fitness)
@@ -32,5 +30,8 @@ public abstract class AbstractIndividu
 		}
 		return 0;
 	}
+	
+	@Override
+	public abstract String toString();
 
 }
