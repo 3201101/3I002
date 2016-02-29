@@ -23,14 +23,21 @@ public class SimuMain {
 
 		String labyFile = "goal.mze"; // args[0];
 		int nbSteps = 50; // Integer.parseInt(args[1]);
-		int nbRules = 10; // Integer.parseInt(args[2]);
+		//int nbRules = 10; // Integer.parseInt(args[2]);
 		try {
 			Labyrinthe laby = ChargeurLabyrinthe.chargerLabyrinthe(labyFile);
 
-			IControleur sc = ControlFactory.createControleur(nbRules);
+			//IControleur sc = ControlFactory.createControleur(nbRules);
+			IControleur sc = ControlFactory.createControleurSmart();
 			Simulation sim = new Simulation(laby, sc);
-			System.out.println(sim.mesurePerf(nbSteps));
+			System.out.println("Regles du controleur :");
 			System.out.println(sc);
+			System.out.println("\nLabi avant :");
+			System.out.println(sim.getLaby());
+			System.out.println("\nNombre de points :");
+			System.out.println(sim.mesurePerf(nbSteps, System.out));
+			System.out.println("\nLabi apres :");
+			System.out.println(sim.getLaby());
 
 		} catch (IOException e) {
 			System.out.println("Problème de chargement du labyrinthe"+e);

@@ -1,5 +1,7 @@
 package agent;
 
+import java.io.PrintStream;
+
 import agent.control.IControleur;
 import agent.laby.Labyrinthe;
 
@@ -54,6 +56,15 @@ public class Simulation {
 	public int mesurePerf (int nbPas) {
 		for (int i=0;i<nbPas;i++){
 			agent.faitUnPas(getLaby());
+		}
+		return agent.getScore();
+	}
+
+
+	public int mesurePerf(int nbPas, PrintStream out) {
+		for (int i=0;i<nbPas;i++){
+			agent.faitUnPas(getLaby());
+			out.println(getLaby());
 		}
 		return agent.getScore();
 	}

@@ -1,43 +1,11 @@
 package agent.laby;
 
 import java.awt.Point;
+import java.io.IOException;
 
-@SuppressWarnings("serial")
-class LabyErroneException extends Exception
-{
-	private Point p;
-
-	public LabyErroneException(Point p)
-	{
-		this.p = p;
-	}
-	public Point getP()
-	{
-		return p;
-	}
-}
-
-@SuppressWarnings("serial")
-class LabyMalEntoureException extends LabyErroneException
-{
-
-	public LabyMalEntoureException(Point p)
-	{
-		super(p);
-	}
-	
-}
-
-@SuppressWarnings("serial")
-class CaseDepartNonVideException extends LabyErroneException
-{
-
-	public CaseDepartNonVideException(Point p)
-	{
-		super(p);
-	}
-	
-}
+import agent.laby.exception.CaseDepartNonVideException;
+import agent.laby.exception.LabyErroneException;
+import agent.laby.exception.LabyMalEntoureException;
 
 public class VerificationLaby
 {
@@ -45,19 +13,19 @@ public class VerificationLaby
 	{
 		for(int x = 0; x < l.Xsize(); x++)
 		{
-			if(l.getContenuCase(x, 0) == ContenuCase.MUR)
+			if(l.getContenuCase(x, 0) != ContenuCase.MUR)
 				throw new LabyMalEntoureException(new Point(x, 0));
 
-			if(l.getContenuCase(x, l.Ysize()-1) == ContenuCase.MUR)
+			if(l.getContenuCase(x, l.Ysize()-1) != ContenuCase.MUR)
 				throw new LabyMalEntoureException(new Point(x, l.Ysize()-1));
 		}
 
 		for(int y = 1; y < l.Ysize()-1; y++)
 		{
-			if(l.getContenuCase(0, y) == ContenuCase.MUR)
+			if(l.getContenuCase(0, y) != ContenuCase.MUR)
 				throw new LabyMalEntoureException(new Point(0, y));
 
-			if(l.getContenuCase(l.Xsize()-1, y) == ContenuCase.MUR)
+			if(l.getContenuCase(l.Xsize()-1, y) != ContenuCase.MUR)
 				throw new LabyMalEntoureException(new Point(l.Xsize()-1, y));
 		}
 	}
@@ -105,9 +73,18 @@ public class VerificationLaby
 		return i;
 	}
 	
-	public static void main(String[] args) 
+	public static void main(String[] args) throws IOException 
 	{
-		
+		Labyrinthe labi = ChargeurLabyrinthe.chargerLabyrinthe(args[0]);
+		System.out.println("Labi avant :\n" + labi);
+		try{
+			verifierConditions(labi);
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
+		corrigerConditions(labi);
+		System.out.println("Labi apres :\n" + labi);
 	}
 
 }

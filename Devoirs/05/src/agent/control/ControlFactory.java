@@ -69,6 +69,23 @@ public class ControlFactory {
 		return c;
 	}
 	
+	public static IControleur createControleurSmart(){
+		Controleur c = (Controleur) createControleurLongeMur();
+		c.add(new Regle(new Observation("?#.?????"),Direction.DROITE));
+		c.add(new Regle(new Observation("???#.???"),Direction.BAS));
+		c.add(new Regle(new Observation("?????#.?"),Direction.GAUCHE));
+		c.add(new Regle(new Observation(".??????#"),Direction.HAUT));
+		c.add(new Regle(new Observation("????#? ?"),Direction.GAUCHE));
+		c.add(new Regle(new Observation(" ?????#?"),Direction.HAUT));
+		c.add(new Regle(new Observation("#? ?????"),Direction.DROITE));
+		c.add(new Regle(new Observation("???# ???"),Direction.BAS));
+		c.add(new Regle(new Observation("?????# ?"),Direction.GAUCHE));
+		c.add(new Regle(new Observation(" ??????#"),Direction.HAUT));
+		c.add(new Regle(new Observation("?# ?????"),Direction.DROITE));
+		c.add(new Regle(new Observation("???# ???"),Direction.BAS));
+
+		return c;
+	}
 	
 	/*******************************************
 	 * FIN DE LA SECTION PUBLIC *****************
