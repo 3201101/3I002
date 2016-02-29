@@ -1,24 +1,22 @@
 
-# 3I002 - TP 02
+# 3I002 - TP 04
 
 _Sources fournies dans le fichier **pobj.algogen-LOGLISCI-NASTURAS-04.jar** ci-joint, ou dans **[le dépôt](http://github.com/3201101/3I002/tree/master/Devoirs/04)**._
 
 
 ## Questions
 
-**Donnez la réponse aux questions ci-dessus. Par ailleurs, copiez-collez le code de votre clase principale et une trace d'exécution de votre programme pour le cas où vous évaluez une population de dix individus constitués d'expressions à deux variables.'**
-
-_Ceci est une réponse partielle, nous vous enverrons une réponse complète quand nous aurons terminé l'énoncé.'_
+**Donnez la réponse aux questions ci-dessus. Par ailleurs, copiez-collez le code de votre clase principale et une trace d'exécution de votre programme pour le cas où vous évaluez une population de dix individus constitués d'expressions à deux variables.**
 
 Classe principale :
 
 	package pobj.algogen;
-
+	
 	import java.util.Random;
-
+	
 	import pobj.algogen.doubles.IndividuDouble;
 	import pobj.algogen.doubles.ValeurCible;
-
+	
 	/**
 	 * Classe d'éxecution du simulateur d'évolution
 	 */
@@ -45,10 +43,10 @@ Classe principale :
 				Population p = PopulationFactory.createRandomPopulation(Integer.parseInt(args[0]));
 				System.out.println("\nPopulation initiale\n");
 				System.out.println(p);
-
+				
 				/* Création d'un environnement basique aléatoire */
 				Environnement e = new ValeurCible();
-
+				
 				/* Évaluation de la population */
 				p.evaluer(e);
 				System.out.println("\nPopulation évaluée\n");
