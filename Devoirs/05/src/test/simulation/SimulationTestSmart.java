@@ -33,7 +33,7 @@ public class SimulationTestSmart {
 
 	@Test
 	public void testMesurePerf() {
-		assertEquals(simul.mesurePerf(100), 4);
+		assertEquals(simul.mesurePerf(100), 10);
 	}
 
 }
