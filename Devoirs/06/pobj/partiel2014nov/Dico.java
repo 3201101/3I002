@@ -1,0 +1,18 @@
+package pobj.partiel2014nov;
+
+import java.util.List;
+import java.util.ArrayList;
+
+public class Dico extends DicoAbs
+{
+	/**
+	 * Cherche un mot dans le dictionnaire.
+	 * @param s un mot à chercher
+	 * @return true si le mot est présent dans le dictionnaire
+	 */
+	public abstract boolean appartient(String s)
+	{
+		/**** TODO ****/
+	}
+
+}
