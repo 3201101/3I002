@@ -1,5 +1,8 @@
 package pobj.partiel2014nov;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Compte
 {
 	/**
@@ -7,13 +10,14 @@ public class Compte
 	 * @param in un noeud, tête de l'arbre à dénombrer
 	 * @return le nombre de mots dans l'arbre
 	 */
-	int nombreNoeud(INoeud in)
+	public static int nombreNoeud(INoeud in)
 	{
 		int t = 1;
 		List<INoeud> f = in.getFils();
 
-		for(int i = 0; i < f.size(); i++)
-			t+= nombreNoeud(f[i]);
+		if(f != null)
+			for(int i = 0; i < f.size(); i++)
+				t+= nombreNoeud(f.get(i));
 
 		return t;
 	}
@@ -23,7 +27,7 @@ public class Compte
 	 * @param in un noeud, tête de l'arbre à dénombrer
 	 * @return le nombre de mots dans l'arbre
 	 */    
-	int nombreMot(INoeud in)
+	public static int nombreMot(INoeud in)
 	{
 		int t = 0;
 		if(in.isMarque() == true)
@@ -31,10 +35,9 @@ public class Compte
 
     	List<INoeud> f = in.getFils();
 
-    	for(int i = 0; i < f.size(); i++)
-    	{
-    		t+= nombreNoeud(f[i]);
-    	}
+    	if(f != null)
+    		for(int i = 0; i < f.size(); i++)
+	    		t+= nombreMot(f.get(i));
 
     	return t;
 	}

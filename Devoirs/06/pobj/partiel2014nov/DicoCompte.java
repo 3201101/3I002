@@ -5,31 +5,41 @@ import java.util.ArrayList;
 
 public class DicoCompte extends Dico implements Comptable
 {
-	Compte c = new Compte();
+	private Compte c = new Compte();
+
+	public DicoCompte()
+	{
+		super();
+	}
+
+	public DicoCompte(List<INoeud> dico)
+	{
+		super(dico);
+	}
 
 	/**
 	 * @return le nombre de noeuds total dans la représentation
 	 */
-	int nombreNoeud()
+	public int nombreNoeud()
 	{
 		int i = 0;
 
-		for (INoeud n : liste)
-			n+= c.nombreNoeud(n);
+		for (INoeud n : this.getDico())
+			i+= this.c.nombreNoeud(n);
 
-		return n;
+		return i;
 	}
 	
 	/**
 	 * @return le nombre total de mots stockés 
 	 */    
-	int nombreMot()
+	public int nombreMot()
 	{
 		int i = 0;
 
-		for (INoeud n : liste)
-			n+= c.nombreMot(n);
+		for (INoeud n : this.getDico())
+			i+= this.c.nombreMot(n);
 
-		return n;
+		return i;
 	}
 }

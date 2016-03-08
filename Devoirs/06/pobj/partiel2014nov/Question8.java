@@ -9,10 +9,10 @@ public class Question8
 		String s = "";
 
 		if(n.isMarque())
-			s.concat(p).concat(n.getLettre()).concat("\n");
+			s+= p + n.getLettre() + "\n";
 		
-		for (INoeud i : n.getFils())
-			s.concat(toSubString(i, p.concat(n.getLettre())))
+		for(INoeud i : n.getFils())
+			s+= toSubString(i, p + n.getLettre());
 
 		return s;
 	}
@@ -36,8 +36,8 @@ public class Question8
 	{
 		String s = "";
 
-		for(INoeud i : d.getdico())
-			s.concat(toString(i));
+		for(INoeud i : d.getDico())
+			s+= toString(i);
 
 		return s;
 	}

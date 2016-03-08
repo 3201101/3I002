@@ -21,7 +21,19 @@ public class Clavier implements Saisissable
 	 */
 	public List<INoeud> uneTouche(List<INoeud> alc, int touche) throws MauvaiseTouche
 	{
-		
+		String s = this.env.get(touche);
+		List<INoeud> l = new ArrayList<INoeud>();
+
+		for(int i = 0; i < alc.size(); i++)
+		{
+			for(int j = 0; j < s.length(); j++)
+			{
+				if(alc.get(i).getLettre() == s.charAt(j))
+					l.add(alc.get(i));
+			}
+		}
+
+		return l;
 	}
 
 	/**
@@ -33,6 +45,20 @@ public class Clavier implements Saisissable
      */
 	public List<INoeud> seqTouche(List<INoeud> alc, int[] touches) throws MauvaiseTouche
 	{
+		List<INoeud> l = alc;
+		List<INoeud> t = new ArrayList<INoeud>();
 
+		for(int i = 0; i < touches.length; i++)
+		{
+			t.clear();
+			t = this.uneTouche(l, touches[i]);
+			l.clear();
+
+			if(i < touches.length-1)
+				for(int j = 0; j < t.size(); j++)
+					l.addAll(t.get(j).getFils());
+		}
+
+		return t;
 	}
 }

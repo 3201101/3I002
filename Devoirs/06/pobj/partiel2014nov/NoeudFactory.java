@@ -13,6 +13,6 @@ public class NoeudFactory
 	 */
 	public static INoeud createNoeud(char lettre, List<INoeud> fils, boolean isMarked)
 	{
-		return Noeud(lettre, fils, isMarked);
+		return new Noeud(lettre, fils, isMarked);
 	}
 }

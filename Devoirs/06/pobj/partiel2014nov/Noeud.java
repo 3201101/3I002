@@ -2,11 +2,11 @@ package pobj.partiel2014nov;
 
 import java.util.List;
 
-public class Noeud
+public class Noeud implements INoeud
 {
-	private char lettre;
-	private boolean fin;
-	private List<INoeud> fils;
+	protected char lettre;
+	protected boolean fin;
+	protected List<INoeud> fils;
 
 	public Noeud(char lettre, List<INoeud> fils, boolean isMarked)
 	{
@@ -18,7 +18,7 @@ public class Noeud
 	/**
 	 * @return la lettre associée à ce noeud de l'arbre.
 	 */
-	char getLettre()
+	public char getLettre()
 	{
 		return lettre;
 	}
@@ -26,7 +26,7 @@ public class Noeud
 	/**
 	 * @return la liste des fils de ce noeud
 	 */
-	List<INoeud> getFils()
+	public List<INoeud> getFils()
 	{
 		return fils;
 	}
@@ -34,7 +34,7 @@ public class Noeud
 	/**
 	 * @return true si le noeud est marqué (c'est la fin d'un mot) ou false sinon.
 	 */
-	boolean isMarque()
+	public boolean isMarque()
 	{
 		return fin;
 	}
@@ -43,8 +43,8 @@ public class Noeud
 	 * Met à jour la propriété marqué ou non du noeud.
 	 * @param isMarque la nouvelle valeur du marquage.
 	 */
-	void setMarque (boolean isMarque)
+	public void setMarque (boolean isMarque)
 	{
-		fin = isMarque;
+		this.fin = isMarque;
 	}
 }

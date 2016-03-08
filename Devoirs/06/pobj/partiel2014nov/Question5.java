@@ -18,5 +18,7 @@ public class Question5
 		d.ajoute("FRISE");
 		d.ajoute("FRIT");
 		d.ajoute("FRITE");
+
+		return d;
 	}
 }
