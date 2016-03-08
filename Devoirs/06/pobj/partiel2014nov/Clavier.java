@@ -21,7 +21,7 @@ public class Clavier implements Saisissable
 	 */
 	public List<INoeud> uneTouche(List<INoeud> alc, int touche) throws MauvaiseTouche
 	{
-
+		
 	}
 
 	/**
