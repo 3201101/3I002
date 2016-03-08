@@ -1,7 +1,7 @@
 
 # 3I002 - TP 06
 
-_Sources fournies dans le fichier **pobj.partiel2014nov-NASTURAS-06.jar** ci-joint, ou dans **[le dépôt](http://github.com/3201101/3I002/tree/master/Devoirs/06)**._
+_Sources fournies dans le fichier **pobj.partiel2014nov-NASTURAS-06.tar.gz** ci-joint, ou dans **[le dépôt](http://github.com/3201101/3I002/tree/master/Devoirs/06)**._
 
 ## Liens utiles
 
