@@ -12,7 +12,15 @@ public class Dico extends DicoAbs
 	 */
 	public abstract boolean appartient(String s)
 	{
-		/**** TODO ****/
+		for(int i = 0; i < s.length(); i++)
+		{
+			INoeud n = chercheNoeud(s[0]);
+
+			if(n == NULL)
+				return false;
+		}
+
+		return n.isMarque();
 	}
 
 }
