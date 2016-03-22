@@ -53,8 +53,10 @@ public class Simulation extends SimpleObservable {
 	 * @param nbPas : le nombre de pas
 	 * @return : le score de l'agent
 	 */
-	public int mesurePerf (int nbPas) {
-		for (int i=0;i<nbPas;i++){
+	public int mesurePerf (int nbPas)
+	{
+		for (int i=0;i<nbPas;i++)
+		{
 			agent.faitUnPas(getLaby());
 			notifyObservers();
 		}
