@@ -45,19 +45,19 @@ public class VerificationLaby
 	{
 		for(int x = 0; x < l.Xsize(); x++)
 		{
-			if(l.getContenuCase(x, 0) == ContenuCase.MUR)
+			if(l.getContenuCase(x, 0) != ContenuCase.MUR)
 				throw new LabyMalEntoureException(new Point(x, 0));
 
-			if(l.getContenuCase(x, l.Ysize()-1) == ContenuCase.MUR)
+			if(l.getContenuCase(x, l.Ysize()-1) != ContenuCase.MUR)
 				throw new LabyMalEntoureException(new Point(x, l.Ysize()-1));
 		}
 
 		for(int y = 1; y < l.Ysize()-1; y++)
 		{
-			if(l.getContenuCase(0, y) == ContenuCase.MUR)
+			if(l.getContenuCase(0, y) != ContenuCase.MUR)
 				throw new LabyMalEntoureException(new Point(0, y));
 
-			if(l.getContenuCase(l.Xsize()-1, y) == ContenuCase.MUR)
+			if(l.getContenuCase(l.Xsize()-1, y) != ContenuCase.MUR)
 				throw new LabyMalEntoureException(new Point(l.Xsize()-1, y));
 		}
 	}
@@ -99,17 +99,12 @@ public class VerificationLaby
 				i++;
 
 				l.setContenuCase(e.getP(), ContenuCase.VIDE);
-			} catch (LabyErroneException e) {}
+			} catch (LabyErroneException e) {
+			}
 		}
 
 		return i;
 	}
-	
-	public static void main(String[] args) 
-	{
-		
-	}
-
 }
 
 

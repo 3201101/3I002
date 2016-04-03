@@ -6,72 +6,65 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import agent.Simulation;
+import agent.control.ControlFactory;
+import agent.control.Controleur;
 import agent.laby.ChargeurLabyrinthe;
-import agent.laby.ContenuCase;
 import agent.laby.Labyrinthe;
+import agent.laby.VerificationLaby;
 
 public class LabyViewer extends JFrame
 {
 	private static final long serialVersionUID = 1L;
-
+	
 	// Des constantes pour mettre sur les textes des menus
-	// Il est recommandé (best practice) au maximum d'utiliser
-	// des constantes plutôt que des String en litéral "Toto" enfouies dans le code.
-	// private static final String XML_EXPORT_MENU = "Export Maze To XML";
-	private static final String SER_EXPORT_MENU = "Sauver labyrinthe";
-	private static final String SER_IMPORT_MENU = "Charger labyrinthe";
-
-	// zone boutons
-	private JPanel sidePanel;
+		// Il est recommandé (best practice) au maximum d'utiliser
+		// des constantes plutôt que des String en litéral "Toto" enfouies dans le code.
+		// private static final String XML_EXPORT_MENU = "Export Maze To XML";
+		private static final String SER_PLAY = "Lancer la simulation";
+		private static final String SER_IMPORT_MENU = "Charger labyrinthe";
 
 	// Le labyrinthe sous-jacent
 	private Labyrinthe laby;
-
-	// Pour les tests getSource dans le Menu Listener : les sources d'événements menu
-	private JMenuItem mi_export;
-	private JMenuItem mi_import;
+	private Controleur control;
+	private int it;
 
 	// La zone montrant le labyrinthe 
-	private LabyPanel centerPanel;
+	private LabyActivePanel centerPanel;
+	
+	// Pour les tests getSource dans le Menu Listener : les sources d'événements menu
+	private JMenuItem mi_play;
+	private JMenuItem mi_import;
 
 	// Les tailles, constantes
 	private static final int COLS = 15, LIGNES = 10;
 
 	/**
-	 * Main
-	 */
-	public static void main(String[] args)
-	{
-		
-	}
-
-	/**
 	 * Constructeur
 	 */
-	public LabyViewer(Agent a, Controleur c, int p)
+	public LabyViewer(Labyrinthe l, Controleur c, int p)
 	{
 		// Titre de la JFrame
-		super("Laby Builder");
+		super("Laby Viewer");
 		
-		// Construire le maze
-		laby = new Labyrinthe(COLS, LIGNES);
+		Labyrinthe t = l;
+		VerificationLaby.corrigerConditions(t);
+		laby = t;
+		control = c;
+		it = p;
 
 		// creer les Panel et menus
 		createCenterPanel();
+		createMenus();
 
 		// Positionner la taille de la fenetre
 		setSize(800, 758);
@@ -86,72 +79,34 @@ public class LabyViewer extends JFrame
 	 * Crée le MazePanel responsable d'afficher le Maze courant.
 	 */
 	private void createCenterPanel() {
-		centerPanel = new LabyPanel(laby);
+		centerPanel = new LabyActivePanel(laby);
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
-
 	}
-
+	
 	/**
-	 * Classe interne pour gérer les événements menu
+	 * Créée les menus d'import export et y associe le traitement défini par MenuListener.
 	 */
-	private class ExportMenuListener implements ActionListener {
+	private void createMenus() {
+		JMenuBar menubar = new JMenuBar();
+		JMenu menu = new JMenu("File");
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JMenuItem item = (JMenuItem) e.getSource();
-			try {
-				/**
-				 * Attention à la sémantique des classes internes ! mi_export
-				 * est membre de la classe englobante.
-				 */
-				if (item == mi_export) {
-					exportMazeData();
-				} else if (item == mi_import) {
-					chargerLabyrinthe();
-				}
-				// else if (item == mi_other) {
-				// }
-			} catch (IOException e1) {
-				// une erreur "jolie"
-				// Attention encore aux classes interne, on veut passer la
-				// JFrame
-				// i.e. le parent des JDialog en premier argument.
-				// C'est la classe englobante, mais on utilise "getFrame" pour
-				// la retrouver.
-				JOptionPane.showInternalMessageDialog(getFrame(), e1
-						.getMessage(), "Error during export ",
-						JOptionPane.ERROR_MESSAGE);
-				e1.printStackTrace();
-			}
-		}
+		ActionListener ml = new ExportMenuListener();
+		
+		mi_play = new JMenuItem(SER_PLAY);
+		mi_play.addActionListener(ml);
+		menu.add(mi_play);
 
+		mi_import = new JMenuItem(SER_IMPORT_MENU);
+		mi_import.addActionListener(ml);
+		menu.add(mi_import);
+
+		menubar.add(menu);
+		menubar.setVisible(true);
+		
+		// positionne la barre
+		this.setJMenuBar(menubar);
 	}
-
-	/**
-	 * Pour repasser this au contexte de la classe locale menuListener
-	 * 
-	 * @return this, typage relaxé en JFrame
-	 */
-	private JFrame getFrame() {
-		return this;
-	}
-
-	/**
-	 * Export du labyrinthe par la sérialisation
-	 * 
-	 * @throws IOException
-	 */
-	public void exportMazeData() throws IOException {
-		// Force la remise à jour de l'état du labyrinthe en fonction des boutons
-		// affichés dans l'interface graphique de dessin
-		// What You See Is What You Get
-		centerPanel.modifLaby();
-
-		String fileName = JOptionPane
-				.showInputDialog("Please enter a file name to save this maze (extension .mze).");
-		ChargeurLabyrinthe.sauverLabyrinthe(fileName, laby);
-	}
-
+	
 	/**
 	 * Import du labyrinthe sauvé par la sérialisation
 	 * 
@@ -178,20 +133,48 @@ public class LabyViewer extends JFrame
 			return;
 		}
 
-		laby = ChargeurLabyrinthe.chargerLabyrinthe(fileName);
-		centerPanel.setLaby(laby);
+		setLaby(ChargeurLabyrinthe.chargerLabyrinthe(fileName));
+	}
+	
+	/**
+	 * Classe interne pour gérer les événements menu
+	 */
+	private class ExportMenuListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JMenuItem item = (JMenuItem) e.getSource();
+			try {
+				if (item == mi_play) {
+					play();
+				} else if (item == mi_import) {
+					chargerLabyrinthe();
+				}
+			} catch (IOException e1) {
+				// une erreur "jolie"
+				// Attention encore aux classes interne, on veut passer la
+				// JFrame
+				// i.e. le parent des JDialog en premier argument.
+				// C'est la classe englobante, mais on utilise "getFrame" pour
+				// la retrouver.
+				JOptionPane.showInternalMessageDialog(getFrame(), e1
+						.getMessage(), "Error during export ",
+						JOptionPane.ERROR_MESSAGE);
+				e1.printStackTrace();
+			}
+		}
+
 	}
 
 	/**
-	 * Export du labyrinthe au format xml
+	 * Pour repasser this au contexte de la classe locale menuListener
 	 * 
-	 * @throws IOException
+	 * @return this, typage relaxé en JFrame
 	 */
-	public void sauverLabyrintheEnXML() throws IOException {
-		centerPanel.modifLaby();
-		ChargeurLabyrinthe.sauverLabyrintheEnXML("maze_xml.txt", laby);
+	private JFrame getFrame() {
+		return this;
 	}
-
+	
 	/**
 	 * Getter
 	 * 
@@ -200,15 +183,36 @@ public class LabyViewer extends JFrame
 	public Labyrinthe getLaby() {
 		return laby;
 	}
+	
+	private void setLaby(Labyrinthe l){
+		Labyrinthe t = l;
+		VerificationLaby.corrigerConditions(t);
+		laby = t;
+		centerPanel.setLaby(laby);
+	}
 
+	private void play(){
+		new Thread(new Runnable(){
+			public void run(){
+				Simulation sim = new Simulation(laby.clone(), control);
+				centerPanel.setLaby(sim.getLaby());
+				sim.addObserver(centerPanel);
+				System.out.println(sim.mesurePerf(it));
+				sim.deleteObserver(centerPanel);
+			}
+		}).start();
+	}
+	
 	/**
 	 * Méthode principale
 	 * 
 	 * @param args
-	 *            : non utilisé
+	 *
 	 */
 	public static void main(String[] args) {
-		new LabyBuilder();
+		Controleur c = (Controleur) ControlFactory.createControleurSmart();
+		
+		new LabyViewer(new Labyrinthe(COLS, LIGNES), c, 30);
 	}
 
 }

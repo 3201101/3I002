@@ -15,7 +15,7 @@ public class SimpleObservable implements ISimpleObservable {
 
 	@Override
 	public void deleteObserver(ISimpleObserver obser) {
-		if(!obs.remove(obs))
+		if(!obs.remove(obser))
 			throw new NoSuchElementException("ISimpleObserver " + obser + " not found.");
 	}
 	
