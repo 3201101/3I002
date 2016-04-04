@@ -1,5 +1,8 @@
 package pobj.algogen;
 
+import agent.control.ControlFactory;
+import agent.control.IControleur;
+import pobj.algogen.agent.IndividuControleur;
 import pobj.algogen.arith.IndividuExpression;
 import pobj.algogen.doubles.IndividuDouble;
 import pobj.arith.Expression;
@@ -30,6 +33,18 @@ public class PopulationFactory
 		for(int i = 0; i<size; i++)
 		{
 			pop.add(new IndividuExpression());
+		}
+		return pop;
+	}
+	
+	public static int nbRules = 5;
+
+	public static Population<IControleur> createRandomControleurPopulation(int size)
+	{
+		Population<IControleur> pop = new Population<>();
+		for(int i = 0; i<size; i++)
+		{
+			pop.add(new IndividuControleur(ControlFactory.createControleur(nbRules)));
 		}
 		return pop;
 	}

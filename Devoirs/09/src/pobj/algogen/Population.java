@@ -2,6 +2,7 @@ package pobj.algogen;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -115,9 +116,13 @@ public class Population<T>
 		String s = "";
 		for(IIndividu<T> i : individus)
 		{
-			s+= " > " + i.toString();
+			s+= " > " + i.toString() +" > " + i.getFitness();
 		}
 		
 		return s;
+	}
+	
+	public List<IIndividu<T>> getList(){
+		return individus;
 	}
 }

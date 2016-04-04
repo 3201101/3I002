@@ -1,6 +1,5 @@
 package agent;
 
-import pobj.obs.ISimpleObserver;
 import pobj.obs.SimpleObservable;
 import agent.control.IControleur;
 import agent.laby.Labyrinthe;
@@ -28,7 +27,7 @@ public class Simulation extends SimpleObservable {
 	 * @param c : le controleur
 	 */
 	public Simulation(Labyrinthe m, IControleur c) {
-		laby = m;
+		laby = m.clone();
 		agent = new Agent(c, m.getPositionInitiale());
 	}
 

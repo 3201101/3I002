@@ -24,16 +24,11 @@ public class LabyActivePanel extends LabyPanel implements ISimpleObserver {
 		catch(InterruptedException e){
 			e.printStackTrace();
 		}
-		modifLaby();
+		updateGraphics();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-//		// requalifier le type de la source
-//		CaseButton c = (CaseButton) e.getSource();
-//		// mettre à jour l'aspect du bouton
-//		c.setAspect(actionSelected);
-//		// mettre à jour le Maze à la position concernée
-//		laby.setContenuCase(c.getPosition(), actionSelected);
+		
 	}
 }
