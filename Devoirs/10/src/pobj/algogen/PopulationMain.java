@@ -18,13 +18,25 @@ import pobj.util.Generateur;
  */
 public class PopulationMain
 {
+	private static Configuration conf = Configuration.getInstance();
+	
+	public static void setDefaultConfig(){
+		conf.setParameterValue(AlgoGenParameter.LABYRINTHE, "QRBen.mze");
+		conf.setParameterValue(AlgoGenParameter.NB_GEN, "5000");
+		conf.setParameterValue(AlgoGenParameter.NB_PAS, "500");
+		conf.setParameterValue(AlgoGenParameter.SEED, "123");
+		conf.setParameterValue(AlgoGenParameter.TAILLE_POP, "100");
+		conf.setParameterValue(AlgoGenParameter.TYPE_INDIVIDU, "Control");
+		conf.setParameterValue(Population.RATIO, "0.2");
+		conf.setParameterValue(Population.UNI, Boolean.toString(true));
+	}
+	
 	/**
 	 * Éxecuté au lancement du programme, lance une simulation de population d'individus évolutifs
 	 * @param args Arguments de lancement
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException{
-		Configuration conf = Configuration.getInstance();
 		if(args.length > 1){
 			try{
 				conf.setConfigurationFromFile(args[1]);
@@ -34,8 +46,9 @@ public class PopulationMain
 			}
 			conf.saveConfigurationToFile(args[1]);
 		}
-		else
+		else{
 			setDefaultConfig();
+		}	
 		
 		switch (conf.getParameterValue(AlgoGenParameter.TYPE_INDIVIDU)) {
 		case "Control":
@@ -54,7 +67,6 @@ public class PopulationMain
 	}
 		
 	public static void testControlPop() throws IOException{
-		Configuration conf = Configuration.getInstance();
 		int taillePop = Integer.parseInt(conf.getParameterValue(AlgoGenParameter.TAILLE_POP));
 
 		String ficLaby = conf.getParameterValue(AlgoGenParameter.LABYRINTHE);
@@ -66,11 +78,10 @@ public class PopulationMain
 		
 		pop = PopulationMain.algoGen(pop, env);
 		
-		new LabyViewer(laby, pop.getList().get(0).getValeur() , 30);
+		new LabyViewer(laby, pop.getList().get(0).getValeur() , Integer.parseInt(conf.getParameterValue(AlgoGenParameter.NB_PAS)));
 	}
 	
 	public static void testExpPop(){
-		Configuration conf = Configuration.getInstance();
 		Generateur.setSeed(Long.parseLong(conf.getParameterValue(AlgoGenParameter.SEED)));
 		int taillePop = Integer.parseInt(conf.getParameterValue(AlgoGenParameter.TAILLE_POP));
 
@@ -83,7 +94,6 @@ public class PopulationMain
 	}
 	
 	public static void testDoublePop(){
-		Configuration conf = Configuration.getInstance();
 		Generateur.setSeed(Long.parseLong(conf.getParameterValue(AlgoGenParameter.SEED)));
 		int taillePop = Integer.parseInt(conf.getParameterValue(AlgoGenParameter.TAILLE_POP));
 		
@@ -93,9 +103,7 @@ public class PopulationMain
 		PopulationMain.algoGen(pop, env);
 	}
 	
-	public static <T> Population<T> algoGen(Population<T> pop, Environnement<T> env)
-	{
-		Configuration conf = Configuration.getInstance();
+	public static <T> Population<T> algoGen(Population<T> pop, Environnement<T> env){
 		Generateur.setSeed(Long.parseLong(conf.getParameterValue(AlgoGenParameter.SEED)));
 		int nbGen = Integer.parseInt(conf.getParameterValue(AlgoGenParameter.NB_GEN));
 		
@@ -120,17 +128,5 @@ public class PopulationMain
 			System.out.println(p);
 		}
 		return p;
-	}
-	
-	public static void setDefaultConfig(){
-		Configuration conf = Configuration.getInstance();
-		conf.setParameterValue(AlgoGenParameter.LABYRINTHE, "QRBen.mze");
-		conf.setParameterValue(AlgoGenParameter.NB_GEN, "500");
-		conf.setParameterValue(AlgoGenParameter.NB_PAS, "50");
-		conf.setParameterValue(AlgoGenParameter.SEED, "123");
-		conf.setParameterValue(AlgoGenParameter.TAILLE_POP, "100");
-		conf.setParameterValue(AlgoGenParameter.TYPE_INDIVIDU, "Control");
-		conf.setParameterValue(Population.RATIO, "0.2");
-		conf.setParameterValue(Population.UNI, Boolean.toString(true));
 	}
 }

@@ -19,6 +19,6 @@ public class SimulationCible implements Environnement<IControleur> {
 	@Override
 	public double eval(IIndividu<IControleur> i) {
 		Simulation sim = new Simulation(laby.clone(), i.getValeur());
-		return sim.mesurePerf(nbPas);
+		return sim.mesurePerf(nbPas); 
 	}
 }

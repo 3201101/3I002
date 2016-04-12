@@ -16,9 +16,10 @@ public class Population<T>{
 	public static String UNI = "SelectionUniforme";
 	private ArrayList<IIndividu<T>> individus = new ArrayList<>();
 	public static final Random r = Generateur.getRandom();
+	private Configuration conf = Configuration.getInstance();
 	private IEvolution<T> evo;
 	{
-		if(Boolean.getBoolean(Configuration.getInstance().getParameterValue(UNI)))
+		if(Boolean.parseBoolean(conf.getParameterValue(Population.UNI)))
 			evo = new EvolutionGenerationnelle<>();
 		else
 			evo = new EvolutionParNiche<>();
@@ -54,7 +55,7 @@ public class Population<T>{
 	public Population<T> evoluer(Environnement<T> cible)
 	{
 		evaluer(cible);
-		Population<T> p = evo.reproduire(this, Double.parseDouble(Configuration.getInstance().getParameterValue(Population.RATIO)));
+		Population<T> p = evo.reproduire(this, Double.parseDouble(conf.getParameterValue(Population.RATIO)));
 		p.muter(1.0);
 		p.evaluer(cible);
 
@@ -117,8 +118,8 @@ public class Population<T>{
 	}
 	
 	public IIndividu<T> popLast(){
-		IIndividu<T> ret = individus.get(individus.size());
-		individus.remove(individus.size());
+		IIndividu<T> ret = individus.get(individus.size() - 1);
+		individus.remove(individus.size() - 1);
 		return ret;
 	}
 }

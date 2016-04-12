@@ -50,5 +50,6 @@ public class Configuration implements Serializable{
 	
 	public void setParameterValue(String p, String v){
 		params.put(p, v);
+		System.out.println(p + " " + params.get(p));
 	}
 }
