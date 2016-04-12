@@ -20,6 +20,7 @@ public class Configuration implements Serializable{
 	private static Configuration singleton = new Configuration();
 	
 	private Configuration() {
+		//System.out.println(params);
 	}
 	
 	public static Configuration getInstance(){
@@ -29,7 +30,7 @@ public class Configuration implements Serializable{
 	public void setConfigurationFromFile(String f) throws IOException{
 		try(FileInputStream fis = new FileInputStream(f); ObjectInputStream ois = new ObjectInputStream(fis)) {
 			Configuration conf = (Configuration) ois.readObject();
-			singleton = conf;
+			params = conf.params;
 		} catch (ClassCastException e) {
 			throw new IOException("Le fichier ne contient pas une Configuration.", e);
 		} catch (ClassNotFoundException e) {
@@ -50,6 +51,5 @@ public class Configuration implements Serializable{
 	
 	public void setParameterValue(String p, String v){
 		params.put(p, v);
-		System.out.println(p + " " + params.get(p));
 	}
 }

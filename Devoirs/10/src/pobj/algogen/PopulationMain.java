@@ -19,16 +19,19 @@ import pobj.util.Generateur;
 public class PopulationMain
 {
 	private static Configuration conf = Configuration.getInstance();
+	public static final String CONTROL_INDIV = "Control";
+	public static final String EXP_INDIV = "Exp";
+	public static final String DOUBLE_INDIV = "Double";
 	
 	public static void setDefaultConfig(){
 		conf.setParameterValue(AlgoGenParameter.LABYRINTHE, "QRBen.mze");
-		conf.setParameterValue(AlgoGenParameter.NB_GEN, "5000");
-		conf.setParameterValue(AlgoGenParameter.NB_PAS, "500");
+		conf.setParameterValue(AlgoGenParameter.NB_GEN, "100");
+		conf.setParameterValue(AlgoGenParameter.NB_PAS, "10");
 		conf.setParameterValue(AlgoGenParameter.SEED, "123");
 		conf.setParameterValue(AlgoGenParameter.TAILLE_POP, "100");
-		conf.setParameterValue(AlgoGenParameter.TYPE_INDIVIDU, "Control");
+		conf.setParameterValue(AlgoGenParameter.TYPE_INDIVIDU, CONTROL_INDIV);
 		conf.setParameterValue(Population.RATIO, "0.2");
-		conf.setParameterValue(Population.UNI, Boolean.toString(true));
+		conf.setParameterValue(Population.UNI, Boolean.toString(false));
 	}
 	
 	/**
@@ -37,27 +40,28 @@ public class PopulationMain
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException{
-		if(args.length > 1){
+		if(args.length > 0){
+			String f = args[0];
 			try{
-				conf.setConfigurationFromFile(args[1]);
+				conf.setConfigurationFromFile(f);
 			}
 			catch(IOException e){
 				setDefaultConfig();
+				conf.saveConfigurationToFile(f);
 			}
-			conf.saveConfigurationToFile(args[1]);
 		}
 		else{
 			setDefaultConfig();
 		}	
 		
 		switch (conf.getParameterValue(AlgoGenParameter.TYPE_INDIVIDU)) {
-		case "Control":
+		case CONTROL_INDIV:
 			testControlPop();
 			break;
-		case "Exp":
+		case EXP_INDIV:
 			testExpPop();
 			break;
-		case "Double":
+		case DOUBLE_INDIV:
 			testDoublePop();
 			break;
 		default:
