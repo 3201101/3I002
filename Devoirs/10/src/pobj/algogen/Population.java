@@ -5,14 +5,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import pobj.util.Configuration;
+import pobj.util.Generateur;
+
 /**
  * Classe représentant une population d'individus évolutifs
  */
-public class Population<T>
-{
+public class Population<T>{
+	public static String RATIO = "ratio";
+	public static String UNI = "SelectionUniforme";
 	private ArrayList<IIndividu<T>> individus = new ArrayList<>();
-	public static final Random r = new Random();
-
+	public static final Random r = Generateur.getRandom();
+	private IEvolution<T> evo;
+	{
+		if(Boolean.getBoolean(Configuration.getInstance().getParameterValue(UNI)))
+			evo = new EvolutionGenerationnelle<>();
+		else
+			evo = new EvolutionParNiche<>();
+	}
+	
 	/**
 	 * Retourne la taille de la population
 	 * @return taille de la population
@@ -43,7 +54,7 @@ public class Population<T>
 	public Population<T> evoluer(Environnement<T> cible)
 	{
 		evaluer(cible);
-		Population<T> p = reproduire();
+		Population<T> p = evo.reproduire(this, Double.parseDouble(Configuration.getInstance().getParameterValue(Population.RATIO)));
 		p.muter(1.0);
 		p.evaluer(cible);
 
@@ -77,35 +88,6 @@ public class Population<T>
 			}
 		}
 	}
-
-	/**
-	 * Crée une nouvelle Population évoluée.
-	 * @return Nouvelle Population
-	 */
-	private Population<T> reproduire()
-	{
-		Population<T> p = new Population<T>();
-		int l = individus.size();
-		int i = 0;
-		int c = Math.max(l/5, 1);
-
-		for(i = 0; i < c; i++)
-		{
-			p.add(individus.get(i).clone());
-		}
-
-		for(i = c; i < l; i++)
-		{
-			int pere = r.nextInt(c);
-			int mere = r.nextInt(c);
-			while(pere == mere)
-				mere = r.nextInt(c);
-			
-			p.add(individus.get(pere).croiser(individus.get(mere)));
-		}
-
-		return p;
-	}
 	
 	/**
 	 * Affiche un résumé textuel de la Population
@@ -124,5 +106,19 @@ public class Population<T>
 	
 	public List<IIndividu<T>> getList(){
 		return individus;
+	}
+	
+	public int getSommeFitness(){
+		int r = 0;
+		for (IIndividu<T> i : individus) {
+			r += i.getFitness();
+		}
+		return r;
+	}
+	
+	public IIndividu<T> popLast(){
+		IIndividu<T> ret = individus.get(individus.size());
+		individus.remove(individus.size());
+		return ret;
 	}
 }

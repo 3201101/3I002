@@ -1,19 +1,16 @@
 package pobj.algogen;
 
 import java.io.IOException;
-import java.util.Random;
 
-import agent.control.ControlFactory;
 import agent.control.IControleur;
 import agent.laby.ChargeurLabyrinthe;
 import agent.laby.Labyrinthe;
 import agent.laby.interf.LabyViewer;
 import pobj.algogen.agent.SimulationCible;
 import pobj.algogen.arith.FonctionCible;
-import pobj.algogen.doubles.IndividuDouble;
 import pobj.algogen.doubles.ValeurCible;
 import pobj.arith.Expression;
-import pobj.arith.ExpressionFactory;
+import pobj.util.Configuration;
 import pobj.util.Generateur;
 
 /**
@@ -24,180 +21,116 @@ public class PopulationMain
 	/**
 	 * Éxecuté au lancement du programme, lance une simulation de population d'individus évolutifs
 	 * @param args Arguments de lancement
+	 * @throws IOException 
 	 */
-	public static void main(String[] args)
-	{
-		testControlPop(args);
-	}
-		
-	public static void testControlPop(String[] args)
-	{
-		try{
-			if(args.length == 1 || args.length <= 4)
-			{
-
-				String fic = "QRBen.mze";
-				int nbPas = 20;
-				
-				/*JFileChooser chooser = new JFileChooser(new File("./"));
-				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-						"Maze files", "mze");
-				chooser.setFileFilter(filter);
-				chooser.setDialogTitle("Entrez un nom de fichier .mze (avec l'extension");
-				int returnVal = chooser.showOpenDialog(new JFrame());
-				String fic;
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					fic = chooser.getSelectedFile().getName();
-				} else {
-					// Un cancel, click sur la croix...
-					return;
-				}
-				
-				System.out.println(fic);*/
-
-				/* Option debug */
-				if(args.length == 2)
-				{
-					//Random rand = new Random(Integer.parseInt(args[1]));
-					// Modification pour TME 10
-					Generateur.getInstance().setSeed(Long.parseLong(args[1]));
-					Population.r.setSeed(Generateur.getInstance().nextLong());
-					ControlFactory.generateur.setSeed(Generateur.getInstance().nextLong());
-				}
-				if(args.length == 3){
-					fic = args[3];
-				}
-				if(args.length == 4){
-					nbPas = Integer.parseInt(args[4]);
-				}
-
-				Labyrinthe laby = ChargeurLabyrinthe.chargerLabyrinthe(fic);
-
-
-				/* Création d'une population aléatoire d'Individus */
-				Population<IControleur> p = PopulationFactory.createRandomControleurPopulation(Integer.parseInt(args[0]));
-				System.out.println("\nPopulation initiale\n");
-				System.out.println(p);
-
-				/* Création d'un environnement basique aléatoire */
-				Environnement<IControleur> e = new SimulationCible(laby, nbPas);
-
-				/* Évaluation de la population */
-				p.evaluer(e);
-				System.out.println("\nPopulation évaluée\n");
-				System.out.println(p);
-
-				/* Évolution de la population */
-				for(int i = 0; i < 100; i++)
-				{
-					p = p.evoluer(e);
-					System.out.println("\nPopulation de génération " + i + "\n");
-					System.out.println(p);
-				}
-
-				System.out.println("Meilleur : " + p.getList().get(0));
-				
-				
-				new LabyViewer(laby, p.getList().get(0).getValeur() , 30);
-
+	public static void main(String[] args) throws IOException{
+		Configuration conf = Configuration.getInstance();
+		if(args.length > 1){
+			try{
+				conf.setConfigurationFromFile(args[1]);
 			}
-			else
-			{
-				throw new IllegalArgumentException("Nombre d'arguments invalide.");
+			catch(IOException e){
+				setDefaultConfig();
 			}
-	} catch (IOException e) {
-		System.out.println("Problème de chargement du labyrinthe"+e);
-		System.exit(1);
-	}
-}
-	
-	public static void testExpPop(String[] args)
-	{
-		if(args.length == 1 || args.length == 2)
-		{
-			/* Option debug */
-			if(args.length == 2)
-			{
-				Random rand = new Random(Integer.parseInt(args[1]));
-				Population.r.setSeed(rand.nextLong());
-				ExpressionFactory.r.setSeed(rand.nextLong());
-				FonctionCible.r.setSeed(rand.nextLong());
-			}
-			else
-			{
-				Random rand = new Random();
-				Population.r.setSeed(rand.nextLong());
-				ExpressionFactory.r.setSeed(rand.nextLong());
-				FonctionCible.r.setSeed(rand.nextLong());
-			}
-		
-			/* Création d'une population aléatoire d'Individus */
-			Population<Expression> p = PopulationFactory.createRandomExpressionPopulation(Integer.parseInt(args[0]));
-			System.out.println("\nPopulation initiale\n");
-			System.out.println(p);
-		
-			/* Création d'un environnement basique aléatoire */
-			Environnement<Expression> e = new FonctionCible();
-		
-			/* Évaluation de la population */
-			p.evaluer(e);
-			System.out.println("\nPopulation évaluée\n");
-			System.out.println(p);
-			
-			/* Évolution de la population */
-			for(int i = 0; i < 100; i++)
-			{
-				p = p.evoluer(e);
-				System.out.println("\nPopulation de génération " + i + "\n");
-				System.out.println(p);
-			}
-			
-			System.out.println(e);
-			
+			conf.saveConfigurationToFile(args[1]);
 		}
 		else
-		{
-			throw new IllegalArgumentException("Nombre d'arguments invalide.");
+			setDefaultConfig();
+		
+		switch (conf.getParameterValue(AlgoGenParameter.TYPE_INDIVIDU)) {
+		case "Control":
+			testControlPop();
+			break;
+		case "Exp":
+			testExpPop();
+			break;
+		case "Double":
+			testDoublePop();
+			break;
+		default:
+			System.err.println("Invalid configuration file");
+			break;
 		}
 	}
+		
+	public static void testControlPop() throws IOException{
+		Configuration conf = Configuration.getInstance();
+		int taillePop = Integer.parseInt(conf.getParameterValue(AlgoGenParameter.TAILLE_POP));
+
+		String ficLaby = conf.getParameterValue(AlgoGenParameter.LABYRINTHE);
+		Labyrinthe laby = ChargeurLabyrinthe.chargerLabyrinthe(ficLaby);
+		int nbPas = Integer.parseInt(conf.getParameterValue(AlgoGenParameter.NB_PAS));
+
+		Population<IControleur> pop = PopulationFactory.createRandomControleurPopulation(taillePop);
+		Environnement<IControleur> env = new SimulationCible(laby, nbPas);
+		
+		pop = PopulationMain.algoGen(pop, env);
+		
+		new LabyViewer(laby, pop.getList().get(0).getValeur() , 30);
+	}
 	
-	public static void testDoublePop(String[] args)
+	public static void testExpPop(){
+		Configuration conf = Configuration.getInstance();
+		Generateur.setSeed(Long.parseLong(conf.getParameterValue(AlgoGenParameter.SEED)));
+		int taillePop = Integer.parseInt(conf.getParameterValue(AlgoGenParameter.TAILLE_POP));
+
+		Population<Expression> pop = PopulationFactory.createRandomExpressionPopulation(taillePop);
+		Environnement<Expression> env = new FonctionCible();
+	
+		PopulationMain.algoGen(pop, env);
+		
+		System.out.println(env);
+	}
+	
+	public static void testDoublePop(){
+		Configuration conf = Configuration.getInstance();
+		Generateur.setSeed(Long.parseLong(conf.getParameterValue(AlgoGenParameter.SEED)));
+		int taillePop = Integer.parseInt(conf.getParameterValue(AlgoGenParameter.TAILLE_POP));
+		
+		Population<Double> pop = PopulationFactory.createRandomDoublePopulation(taillePop);
+		Environnement<Double> env = new ValeurCible();
+	
+		PopulationMain.algoGen(pop, env);
+	}
+	
+	public static <T> Population<T> algoGen(Population<T> pop, Environnement<T> env)
 	{
-		if(args.length == 1 || args.length == 2)
+		Configuration conf = Configuration.getInstance();
+		Generateur.setSeed(Long.parseLong(conf.getParameterValue(AlgoGenParameter.SEED)));
+		int nbGen = Integer.parseInt(conf.getParameterValue(AlgoGenParameter.NB_GEN));
+		
+		/* Création d'une population aléatoire d'Individus */
+		Population<T> p = pop;
+		System.out.println("\nPopulation initiale\n");
+		System.out.println(p);
+	
+		/* Création d'un environnement basique aléatoire */
+		Environnement<T> e = env;
+	
+		/* Évaluation de la population */
+		p.evaluer(e);
+		System.out.println("\nPopulation évaluée\n");
+		System.out.println(p);
+		
+		/* Évolution de la population */
+		for(int i = 0; i < nbGen; i++)
 		{
-			/* Option debug */
-			if(args.length == 2)
-			{
-				Random rand = new Random(Integer.parseInt(args[1]));
-				Population.r.setSeed(rand.nextLong());
-				IndividuDouble.r.setSeed(rand.nextLong());
-				ValeurCible.r.setSeed(rand.nextLong());
-			}
-		
-			/* Création d'une population aléatoire d'Individus */
-			Population<Double> p = PopulationFactory.createRandomDoublePopulation(Integer.parseInt(args[0]));
-			System.out.println("\nPopulation initiale\n");
+			p = p.evoluer(e);
+			System.out.println("\nPopulation de génération " + i + "\n");
 			System.out.println(p);
-		
-			/* Création d'un environnement basique aléatoire */
-			Environnement<Double> e = new ValeurCible();
-		
-			/* Évaluation de la population */
-			p.evaluer(e);
-			System.out.println("\nPopulation évaluée\n");
-			System.out.println(p);
-			
-			/* Évolution de la population */
-			for(int i = 0; i < 10; i++)
-			{
-				p = p.evoluer(e);
-				System.out.println("\nPopulation de génération " + i + "\n");
-				System.out.println(p);
-			}
 		}
-		else
-		{
-			throw new IllegalArgumentException("Nombre d'arguments invalide.");
-		}
+		return p;
+	}
+	
+	public static void setDefaultConfig(){
+		Configuration conf = Configuration.getInstance();
+		conf.setParameterValue(AlgoGenParameter.LABYRINTHE, "QRBen.mze");
+		conf.setParameterValue(AlgoGenParameter.NB_GEN, "500");
+		conf.setParameterValue(AlgoGenParameter.NB_PAS, "50");
+		conf.setParameterValue(AlgoGenParameter.SEED, "123");
+		conf.setParameterValue(AlgoGenParameter.TAILLE_POP, "100");
+		conf.setParameterValue(AlgoGenParameter.TYPE_INDIVIDU, "Control");
+		conf.setParameterValue(Population.RATIO, "0.2");
+		conf.setParameterValue(Population.UNI, Boolean.toString(true));
 	}
 }
